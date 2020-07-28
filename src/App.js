@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
-import Currencies from "./components/Currencies";
+// import Currencies from "./components/Currencies";
+import Login from './components/Login';
 
  class App extends Component{
    render(){
@@ -9,7 +10,7 @@ import Currencies from "./components/Currencies";
          <header className="Header" >
             <h1 className="App-title" >Currencies</h1>
          </header>
-         <Currencies/>
+         <Login/>
        </div>
      )
    }

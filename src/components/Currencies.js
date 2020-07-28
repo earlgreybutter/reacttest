@@ -10,20 +10,13 @@ class Currencies extends Component {
     }
 
     componentDidMount(){
-        fetch('http://localhost:8080/currencies', 
-        {headers: { "Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTU5NTk4Njc4MH0.0dPkzhbNG4ftdCOc0jsfZuYHi1ExCc_2xbYsruvMNKf66IWdRfYXHxMQ0ozxVEX_JKAQ-i_hi77ZgUh2Zuc7vA"}})
-        .then((response)=>response.json())
-        .then((responseData)=>{
-            this.setState({
-                currencies: responseData
-            })
-        })
-        .catch(err => console.error(err))
+      this.fetchCurrencies();
     }
 
     fetchCurrencies = () => {
+        const jwtToken = sessionStorage.getItem("jwt");
         fetch('http://localhost:8080/currencies', 
-        {headers: { "Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTU5NTk4Njc4MH0.0dPkzhbNG4ftdCOc0jsfZuYHi1ExCc_2xbYsruvMNKf66IWdRfYXHxMQ0ozxVEX_JKAQ-i_hi77ZgUh2Zuc7vA", 
+        {headers: { "Authorization": jwtToken, 
             "Content-Type":"application/json"}})
         .then((response)=>response.json())
         .then((responseData)=>{
@@ -35,22 +28,40 @@ class Currencies extends Component {
     }
 
     onDelClick = (id) => {
+        const jwtToken = sessionStorage.getItem("jwt");
         if(window.confirm('Are you sure to delete currency?')){
             fetch('http://localhost:8080/currencies/' + id, {
                 method : 'DELETE', 
                 headers : new Headers({
-                    "Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTU5NTk4Njc4MH0.0dPkzhbNG4ftdCOc0jsfZuYHi1ExCc_2xbYsruvMNKf66IWdRfYXHxMQ0ozxVEX_JKAQ-i_hi77ZgUh2Zuc7vA"
+                    "Authorization": jwtToken, 
+                    "Content-Type":"application/json"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
                 }) 
             }).then(res => this.fetchCurrencies())
                 .catch(err => console.error(err));
         }
     }
 
+    addCurrency(currency) {
+        const jwtToken = sessionStorage.getItem("jwt");
+        fetch('http://localhost:8080/currencies',{
+            method : 'POST', 
+            headers:{
+                'Accept':'applicaton/json, text/plain, */*',
+                "Authorization":jwtToken, 
+                "Content-Type":"application/json"
+            }, 
+            body : JSON.stringify(currency)
+        })
+            .then(res => this.fetchCurrencies())
+            .catch(err => console.log(err))
+    }
+
     updateCurrency(currency){
+        const jwtToken = sessionStorage.getItem("jwt");
         fetch('http://localhost:8080/currencies', {
             method : 'PUT', 
             headers : {
-                "Authorization" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTU5NTk4Njc4MH0.0dPkzhbNG4ftdCOc0jsfZuYHi1ExCc_2xbYsruvMNKf66IWdRfYXHxMQ0ozxVEX_JKAQ-i_hi77ZgUh2Zuc7vA",
+                "Authorization" : jwtToken,
                 "Content-Type" : "application/json"
             }, 
             body : JSON.stringify(currency)
